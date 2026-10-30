@@ -1,0 +1,42 @@
+#include <MD_Parola.h>
+#include <MD_MAX72xx.h>
+#include <SPI.h>
+
+// Define the hardware type. FC16_HW is the most common for 4-in-1 modules on Amazon/eBay.
+// If your text renders backward or upside down, change this to PAROLA_HW, GENERIC_HW, or 
+ICSTATION_HW.
+#define HARDWARE_TYPE MD_MAX72XX::FC16_HW 
+
+// Number of 8x8 matrices chained together (Change to 1 if using a single 8x8 block)
+#define MAX_DEVICES 4
+
+// Define the Chip Select pin
+#define CS_PIN 10
+
+// Setup hardware SPI connection
+MD_Parola myDisplay = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
+
+void setup() {
+// Initialize the display
+myDisplay.begin(); 21. 
+// Set brightness from 0 (min) to 15 (max)
+myDisplay.setIntensity(5);
+
+// Clear the display
+myDisplay.displayClear();
+
+/* 
+* displayText syntax: (text, alignment, speed, pause, effectIn, effectOut)
+* PA_SCROLL_RIGHT moves the text from the Left side of the screen to the Right.
+* Speed is in milliseconds (lower number = faster scroll).
+*/
+ myDisplay.displayText("Hello World", PA_CENTER, 75, 0, PA_SCROLL_RIGHT, PA_SCROLL_RIGHT);
+ }
+
+ void loop() {
+// displayAnimate() returns true when the current animation has finished
+ if (myDisplay.displayAnimate()) {
+ // Reset the animation to loop it continuously
+ myDisplay.displayReset();
+}
+}
